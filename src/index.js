@@ -1,27 +1,33 @@
+import menuCardTpl from './templates/menu-tpl.hbs';
 import './styles.css';
-import images from './menu.json';
+import menuItems from './menu.json';
 
 const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
+const { LIGHT, DARK } = Theme;
 
 const themSwitcher = document.querySelector(".theme-switch__control");
 const themeToggle = document.querySelector('.theme-switch__toggle');
 const bgColor = document.querySelector("body");
+const menuList = document.querySelector('.js-menu');
+const menuItem = createMenuMarkup(menuItems);
 
 themSwitcher.addEventListener("change", onControlThemeSwitch);
 populateChooseTheme();
 
+menuList.insertAdjacentHTML("beforeend", menuItem);
+
 function onControlThemeSwitch(event) {
     if (event.target.checked) {
-        bgColor.classList.remove(Theme.LIGHT);
-        bgColor.classList.add(Theme.DARK);
-        localStorage.setItem("theme", Theme.DARK);
+        bgColor.classList.remove(LIGHT);
+        bgColor.classList.add(DARK);
+        localStorage.setItem("theme", DARK);
     } else {
-        bgColor.classList.remove(Theme.DARK);
-        bgColor.classList.add(Theme.LIGHT);
-        localStorage.setItem("theme", Theme.LIGHT);
+        bgColor.classList.remove(DARK);
+        bgColor.classList.add(LIGHT);
+        localStorage.setItem("theme", LIGHT);
     }
 };
 
@@ -32,7 +38,12 @@ function populateChooseTheme(event) {
         bgColor.classList.toggle(currentTheme);
     }
 
-    if (currentTheme === Theme.DARK) {
-        themeToggle.setAttribute('checked', 'event.target.checked');
+    if (currentTheme === DARK) {
+        // themeToggle.setAttribute('checked', 'event.target.checked');
+        themeToggle.checked = true;
     }
+}
+
+function createMenuMarkup(menuItems) {
+    return menuItems.map(menuCardTpl).join('');
 }
